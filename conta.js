@@ -1,6 +1,5 @@
 var database = firebase.database();
 
-console.log("keep it up");
 
 saldo_atual();
 
@@ -9,8 +8,8 @@ extrato_historico();
 //BOTOES
 function clicou(tipo) {
     console.log('clicou ' + tipo);
-    //muda de bottão para input
-    document.getElementById(tipo + '_div').innerHTML = '<input id="'+tipo+'_input" type="number" placeholder="insira Enter após digitar o valor" onblur=" voltar(\'' + tipo +'\')" onkeypress="teclou(event,this,\''+tipo+'\')" />';
+    //muda de bottÃ£o para input
+    document.getElementById(tipo + '_div').innerHTML = '<input id="'+tipo+'_input" type="number" placeholder="insira Enter apÃ³s digitar o valor" onblur=" voltar(\'' + tipo +'\')" onkeypress="teclou(event,this,\''+tipo+'\')" />';
     //foca no input
     document.getElementById(tipo + '_input').focus();
 
@@ -19,7 +18,7 @@ function clicou(tipo) {
 
 function voltar(tipo) {
     console.log('voltou ' + tipo);
-    //muda de input para botão
+    //muda de input para botÃ£o
     document.getElementById(tipo + '_div').innerHTML = '<input id="botao_'+tipo+'" type="button" value="' + tipo.toUpperCase() + '" onclick="clicou(\'' + tipo+'\')"/>';
 }
 
@@ -36,10 +35,10 @@ function teclou(e, texto, tipo) {
 
             
         } else {
-            alert('DIGITE APENAS NÚMEROS');
+            alert('DIGITE APENAS NÃšMEROS');
         }
 
-        //tira o foco após digitação
+        //tira o foco apÃ³s digitaÃ§Ã£o
         $('#' + tipo + '_input').blur();
 
     }
