@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Conta Bancária</title>
+    <link rel="stylesheet" href="conta.css" />
+</head>
+<body>
+    <center>
+        <!--saldo-->
+        <div id="saldo"></div>
+        <!--botoes-->
+        <div id="depositar_div"><input id="botao_depositar" type="button" value="DEPOSITAR" onclick="clicou('depositar')" /> </div>
+        <div id="sacar_div"><input id="botao_sacar" type="button" value="SACAR" onclick="clicou('sacar')" /> </div>
+
+        <!--extrato-->
+        <div id="extrato">
+            <nav>
+                <ul id="extrato_historico">
+                </ul>
+            </nav>
+        </div>
+
+        <!--recibo-->
+
+
+        <div id="local_recibo">
+
+            <div id="recibo"></div>
+            <img id="download_img" src="download.png" />
+        </div>
+        
+    </center>
+
+    <!--jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--pdf-->
+    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <!--firebase-->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyDjQjwtctiELqBnuuzLE5QZ71IjcNXsIQ4",
+            authDomain: "santo-andre-16e1b.firebaseapp.com",
+            databaseURL: "https://santo-andre-16e1b-default-rtdb.firebaseio.com",
+            projectId: "santo-andre-16e1b",
+            storageBucket: "santo-andre-16e1b.appspot.com",
+            messagingSenderId: "7326664481",
+            appId: "1:7326664481:web:8bd2b3bccca54aaca2a060",
+            measurementId: "G-7VTXWQDFPW"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+
+    <!--arquivo do projeto-->
+    <script src="conta.js"></script>
+</body>
+</html>
