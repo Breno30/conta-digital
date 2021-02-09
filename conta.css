@@ -53,7 +53,9 @@ input {
     transform: translate(-50%,0%);
     border: solid 2px gray;
     border-radius: 2vh;
-    width: 24vw;
+    /*width: 24vw;*/
+
+    width: auto;
     height: 44vh;
     overflow: scroll;
     overflow-x: hidden;
@@ -67,14 +69,21 @@ input {
 
 
 nav{
-    width: 22vw;
+    width: auto;
     scrollbar-base-color:transparent;
 }
 
-ul{
+#extrato_historico {
+    padding: 1vw;
     font-size: x-large;
-    list-style-type:none;
-    text-align:left;
+    list-style-type: none;
+    text-align: left;
+}
+
+#table_recibo td{
+    padding: 1vh;
+    border: 0px;
+    font-size: x-large;
 }
 
 
@@ -82,7 +91,7 @@ ul{
 #local_recibo {
     visibility: hidden;
     position: fixed;
-    top: 26vh;
+    top: 20vh;
     left: 70vw;
     border: solid 2px gray;
     border-radius: 2vh;
@@ -91,13 +100,16 @@ ul{
 }
 
 td {
-    padding: 5px;
+    padding: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.68);
+    border-radius: 2px;
 }
+
+
 
 #download_img {
     padding: 2px;
     border-radius: 3px;
-    visibility: hidden;
     height: 4vh;
     width: 4vh;
 
@@ -106,6 +118,19 @@ td {
 #download_img:hover{
     background-color:  rgba(93, 174, 252, 0.89)
 }
+
+
+#view_comprovante {
+    width: 2vh;
+    height: 2vh;
+    border-radius: 2px;
+    padding: 1vh;
+}
+
+#view_comprovante:hover{
+    background-color:rgba(204, 204, 204, 0.85);
+}
+
 
 /* tira +/- do input*/
 input[type=number]::-webkit-inner-spin-button,

@@ -29,8 +29,13 @@ function teclou(e, texto, tipo) {
 
         //se o valor for numero
         if ($.isNumeric(valor_digitado)) {
-            //enviar dados
-            contar_enviar_firebase(tipo, valor_digitado);
+            if (valor_digitado > 0) {
+                //enviar dados
+                contar_enviar_firebase(tipo, valor_digitado);
+            } else {
+                alert('DIGITE UM VALOR ACIMA DE ZERO');
+            }
+
 
             
         } else {
@@ -89,12 +94,12 @@ function extrato_historico() {
 
         //corre pelo array de tras para frente
         for (var x = extratos.length-1; x>=0; x--) {
-            if (extratos[x][0] == 's') {
+            if (extratos[x]['tipo'][0] == 'S') {
                 //se sacou, extrato vermelho
-                $('#extrato_historico').append('<li style="color: red">' + extratos[x] + '</li>');
+                $('#extrato_historico').append('<tr style="color: red"> <td>' + extratos[x]['tipo'] + '</td> <td>R$ '+extratos[x]['valor']+'</td> <td>'+extratos[x]['dia']+'</td> <td>'+extratos[x]['hora']+'</td>  <td> <img id="view_comprovante" onclick="enviar_local_recibo('+x+')"  src="view.png"/>  </td></tr>');
             } else {
                 //se depositou, extrato verde
-                $('#extrato_historico').append('<li style="color: green">' + extratos[x] + '</li>');
+                $('#extrato_historico').append('<tr style="color: green"> <td>' + extratos[x]['tipo'] + '</td> <td>R$ ' + extratos[x]['valor'] + '</td> <td>' + extratos[x]['dia'] + '</td> <td>' + extratos[x]['hora'] + '</td>  <td> <img id="view_comprovante" onclick="enviar_local_recibo(' + x + ')" src="view.png"/>  </td></tr>');
             }
             
         }
@@ -116,25 +121,42 @@ function contar_enviar_firebase(tipo, valor) {
         enviar_firebase(tipo, valor, dados.val());
     }
 
-    //fazendo recibo
-    enviar_local_recibo(tipo, valor);
+
 
 
 }
 
+function verbo_passado(tipo) {
+    var tipo_str;
+    if (tipo == 'depositar') {
+        tipo_str = 'Depositou ';
+    } else {
+        tipo_str = 'Sacou ';
+    }
+    return tipo_str;
+}
 
 function enviar_firebase(tipo, valor, cont) {
     //cria variavel com verbo no passado
-    var tipo_str;
-    if (tipo == 'depositar') {
-        tipo_str = 'depositou R$ ';
-    } else {
-        tipo_str = 'sacou R$ ';
-    }
+    var tipo_str = verbo_passado(tipo);
 
-    //adiciona a extratos
+    //pega tempo atual
+    var d = new Date;
+    //dia atual
+    var dia = d.getDate() + ' / ' + (d.getMonth() + 1) + ' / ' + d.getFullYear();
+    //hora atual
+    var hora = d.getHours() + ' : ' + d.getMinutes() + ' : ' + d.getSeconds();
+
     var ref = database.ref();
-    ref.child('extrato/extrato_' + cont).set(tipo_str + valor);
+
+    //adiciona recibo a extratos
+    ref.child('extrato/extrato_' + cont).set({
+        tipo: tipo_str,
+        valor: valor,
+        dia: dia,
+        hora: hora
+    });
+
     //aumenta contagem
     cont++;
     //envia contagem
@@ -177,34 +199,36 @@ function gerarPDF(){
     
 }
 
-function enviar_local_recibo(tipo, valor) {
-    //deixando recibo e botao de download visiveis
-    $('#local_recibo').css('visibility', 'visible');
-    $('#download_img').css('visibility', 'visible');
 
-    //mudando texto das açoes para o passado
-    var tipo_str;
-    if (tipo == 'depositar') {
-        tipo_str = 'depositou ';
-    } else {
-        tipo_str = 'sacou ';
+function enviar_local_recibo(x) {
+    var ref = database.ref('extrato/extrato_'+(x+200));
+    ref.once('value', pegar_dados);
+
+    function pegar_dados(extrato) {
+        //colocando informações em uma array
+        var dados_extrato = Object.values(extrato.val());
+        //escrevendo recibo na tela
+        escrever_local_recibo(dados_extrato[0], dados_extrato[1], dados_extrato[2], dados_extrato[3]);
     }
 
+}
 
-    var d = new Date;
 
-    //limpa recibo
+function escrever_local_recibo(dia, hora, tipo, valor) {
+    //mostra local do recibo 
+    $('#local_recibo').css('visibility', 'visible');
+
+    //limpa local do recibo
     $('#recibo').html('');
-    //adiciona titulo
-    $('#recibo').append('<center>RECIBO');
-
-    $('#recibo').append('<table padding="100px">' +
-        //valor
-        ' <tr> <td>' + tipo_str + '</td><td> R$ ' + valor + '</td> </tr>' +
-        //dia
-        '<tr>  <td>Dia</td> <td>' + d.getDay() + ' / ' + (d.getMonth() + 1) + ' / ' + d.getFullYear() + '</td></tr>' +
-        //horario
-        '<tr>  <td>Horário</td> <td>' + d.getHours() + ' : ' + d.getMinutes() + ' : ' + d.getSeconds() +'</td></tr></table ></center> ');
+    //adiciona conteudo
+    $('#recibo').append('<table id="table_recibo">' +
+        //linha 1
+        '<tr><td>' + tipo + '</td><td>R$ ' + valor + '</td></tr>' +
+        //linha 2
+        '<tr><td>Dia</td><td>' + dia + '</td></tr>' +
+        //linha 3
+        '<tr><td>Horário</td><td>'+hora+'</td></tr>'+
+        '</table > ');
 
 }
 
